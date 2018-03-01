@@ -7,9 +7,14 @@ def mothur(command, **kwargs):
            + "\n"
            )
 
-rule link_clones:
-    output: 'seq/clones.v4.fn'
-    input: 'raw/clones.v4.fn'
+rule link_smith:
+    output: 'seq/smith.v4.fn'
+    input: 'raw/smith.v4.fn'
+    shell: "ln -frs {input} {output}"
+
+rule link_martens:
+    output: 'seq/martens.v4.fn'
+    input: 'raw/martens.v4.fn'
     shell: "ln -frs {input} {output}"
 
 rule link_refs:
@@ -19,9 +24,9 @@ rule link_refs:
 
 rule combine_data:
     output: 'seq/all.v4.fn'
-    input: raw="seq/clones.v4.fn", ref="seq/refs.v4.fn"
+    input: smith="seq/smith.v4.fn", martens="seq/martens.v4.fn", ref="seq/refs.v4.fn"
     shell:
-        "cat {input.raw} {input.ref} > {output}"
+        "cat {input.smith} {input.martens} {input.ref} > {output}"
 
 rule align_rrs_v4:
     output: 'seq/{stem}.v4.afn'
